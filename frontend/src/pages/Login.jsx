@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 function Login() {
-
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
 
   return (
@@ -60,7 +60,10 @@ function Login() {
 
         </div>
 
-        <button className="w-full bg-blue-600 hover:bg-blue-700 transition p-3 rounded-lg text-white font-medium">
+        <button 
+          className="w-full bg-blue-600 hover:bg-blue-700 transition p-3 rounded-lg text-white font-medium"
+          onClick={() => navigate("/dashboard")}
+        >
           Sign In
         </button>
 
