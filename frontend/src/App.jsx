@@ -9,7 +9,7 @@ import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import AddTransaction from "./pages/AddTransaction"; // ✅ Import AddTransaction
+import AddTransaction from "./pages/AddTransaction"; 
 
 // Protected route component
 function PrivateRoute({ children }) {
@@ -43,7 +43,7 @@ function App() {
           } 
         />
         <Route 
-          path="/add-transaction"   // ✅ Tambahkan route untuk AddTransaction
+          path="/add-transaction"   
           element={
             <PrivateRoute>
               <AddTransaction />

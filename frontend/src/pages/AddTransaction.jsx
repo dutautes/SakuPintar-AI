@@ -30,7 +30,7 @@ function AddTransaction() {
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [open, setOpen] = useState(false); // ✅ FIX
+  const [open, setOpen] = useState(false); 
 
   const handleSave = () => {
     if (!amount || !category) {
