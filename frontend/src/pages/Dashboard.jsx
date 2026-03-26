@@ -70,7 +70,7 @@ function Dashboard() {
     return fullDate;
   };
 
-  // 🔥 FILTER TRANSACTIONS BERDASARKAN SEARCH
+  // FILTER TRANSACTIONS BERDASARKAN SEARCH
   const filteredTransactions = transactions
     .filter((t) => {
       if (!search) return true;
