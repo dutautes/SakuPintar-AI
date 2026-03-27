@@ -11,15 +11,20 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import AddTransaction from "./pages/AddTransaction"; 
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 // Protected route component
 function PrivateRoute({ children }) {
-  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-  return isLoggedIn ? children : <Navigate to="/" />;
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/" />;
 }
 
 function App() {
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         {/* Auth routes */}
         <Route path="/" element={<Login />} />

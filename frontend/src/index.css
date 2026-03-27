@@ -15,3 +15,19 @@ body{
   width:100%;
   min-height:100vh;
 }
+
+/* Autofill fix untuk dark theme inputs */
+/* Autofill fix untuk dark mode input */
+/* Di file CSS global atau style jsx */
+/* Autofill Chrome fix, tapi border & padding tetap aman */
+/* Fix autofill Chrome agar bg tetap bg-gray-800 dan teks putih */
+/* Fix autofill Chrome agar bg tetap bg-gray-800 dan teks putih */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset !important; /* bg-gray-800 */
+  -webkit-text-fill-color: #fff !important; /* teks putih */
+  caret-color: white; /* supaya kursor tetap putih */
+  transition: background-color 5000s ease-in-out 0s !important;
+}
