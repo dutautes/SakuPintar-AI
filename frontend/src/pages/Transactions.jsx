@@ -65,19 +65,32 @@ function Transactions() {
   { label: "Last 30 Days", value: 30 },
   ];
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("trx")) || [];
-    setTransactions(data);
-  }, []);
+useEffect(() => {
+  const token = localStorage.getItem("token");
+console.log("TOKEN:", token);
+  const fetchTransactions = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  const categoryList = [
-    "All",
-    ...new Set(
-      transactions
-        .map((t) => t.category)
-        .filter((c) => c !== "Income")
-    ),
-  ];
+      const res = await fetch("http://localhost:5000/api/transactions", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // 🔥 penting
+        },
+      });
+
+      const data = await res.json();
+      console.log("DATA:", data); // debug
+
+      setTransactions(data);
+    } catch (err) {
+      console.log("Error fetching transactions:", err);
+    }
+  };
+
+  fetchTransactions();
+}, []);
 
   const filteredTransactions = transactions.filter((t) => {
   const matchCategory =
@@ -103,6 +116,14 @@ function Transactions() {
 
  return matchCategory && matchSearch && matchDate;
 });
+
+const totalBalance = transactions.reduce((acc, t) => {
+  if (t.type === "Income") {
+    return acc + Number(t.amount);
+  } else {
+    return acc - Number(t.amount);
+  }
+}, 0);
   return (
     <div className="flex min-h-screen bg-[#F5F7FB]">
       <Sidebar />

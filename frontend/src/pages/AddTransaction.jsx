@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { toast } from "react-toastify";
 import {
   ShoppingCart,
   Utensils,
@@ -32,29 +33,51 @@ function AddTransaction() {
   const [time, setTime] = useState("");
   const [open, setOpen] = useState(false); 
 
-  const handleSave = () => {
-    if (!amount || !category) {
-      alert("Isi data dulu!");
+  const handleSave = async () => {
+  if (!amount || !category) {
+    toast.error("Isi data dulu!");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Belum login!");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // 🔥 WAJIB
+      },
+      body: JSON.stringify({
+        category,
+        type,
+        amount,
+        date,
+        desc,
+      }),
+    });
+
+    const data = await res.json();
+    console.log("RESP:", data);
+
+    if (!res.ok) {
+      alert(data.message);
       return;
     }
 
-    const oldData = JSON.parse(localStorage.getItem("trx")) || [];
+    toast.success("Transaksi berhasil disimpan!");
+    navigate("/transactions"); // ✅ pindah setelah sukses
 
-    const newData = [
-      {
-        type,
-        amount,
-        desc,
-        category,
-        date,
-        time,
-      },
-      ...oldData,
-    ];
-
-    localStorage.setItem("trx", JSON.stringify(newData));
-    navigate("/transactions");
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Gagal simpan transaksi");
+  }
+};
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FB]">

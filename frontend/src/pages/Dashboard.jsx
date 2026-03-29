@@ -29,9 +29,34 @@ function Dashboard() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("trx")) || [];
-    setTransactions(data);
-  }, []);
+  const fetchTransactions = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/transactions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      console.log("DATA DASHBOARD:", data);
+
+      // 🔥 biar ga error
+      if (Array.isArray(data)) {
+        setTransactions(data);
+      } else {
+        setTransactions([]);
+      }
+
+    } catch (err) {
+      console.log("Error:", err);
+      setTransactions([]);
+    }
+  };
+
+  fetchTransactions();
+}, []);
 
   const now = new Date();
   const currentMonth = now.getMonth();

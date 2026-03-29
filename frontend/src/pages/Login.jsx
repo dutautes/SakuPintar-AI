@@ -3,41 +3,54 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Login() {
+ 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+ 
 
-  const handleSignIn = async (e) => {
-    e.preventDefault(); // ✅ penting
+const handleSignIn = async (e) => {
+  e.preventDefault();
 
-    if (!email || !password) {
-      return toast.error("Email dan password wajib diisi!");
+ const lastLogout = parseInt(localStorage.getItem("lockoutTime"));
+  const now = Date.now();
+
+  if (lastLogout && now - lastLogout < 10 * 1000) {
+    return toast.error("Tunggu 10 detik sebelum login lagi!");
+  }
+
+  if (!email || !password) {
+    return toast.error("Email dan password wajib diisi!");
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json(); // ✅ ambil data dulu
+
+    if (res.ok) {
+      // ✅ simpan token
+      localStorage.setItem("token", data.token);
+
+      // ✅ simpan user (optional tapi bagus)
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      toast.success("Login berhasil!");
+      window.location.href = "/dashboard";
+    } else {
+      toast.error(data.message || "Email atau password salah!");
     }
+  } catch (err) {
+    toast.error("Server error, coba lagi nanti.");
+  }
+};
 
-    try {
-      const res = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        toast.success("Login berhasil!");
-        navigate("/dashboard");
-      } else {
-        toast.error(data.message || "Email atau password salah!");
-      }
-
-    } catch (err) {
-      toast.error("Server error, coba lagi nanti.");
-    }
-  };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] to-[#020617]">
