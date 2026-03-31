@@ -5,19 +5,15 @@ function Analytics() {
   return (
     <div className="flex min-h-screen">
       <Sidebar />
+
       <div className="flex-1 p-8 bg-[#f5f7fb]">
         <h1 className="text-2xl font-semibold mb-4">Analytics</h1>
         <p>Di sini bisa menampilkan grafik, laporan, dan analitik data pengguna.</p>
-      </div>
-    </div>
-  );
-}
- <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-            Export Report
-          </button>
-        </div>
 
-        
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg mb-4">
+          Export Report
+        </button>
+
         <div className="grid grid-cols-4 gap-4 mb-6">
           <div className="bg-white p-4 rounded-xl shadow">
             <p className="text-sm text-gray-500">Total Spent (Rp)</p>
@@ -45,7 +41,6 @@ function Analytics() {
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          
           <div className="col-span-2 bg-white p-6 rounded-xl shadow">
             <h2 className="font-semibold mb-4">Spending Trend (2023)</h2>
 
@@ -79,8 +74,10 @@ function Analytics() {
             </ul>
           </div>
         </div>
+
       </div>
     </div>
   );
 }
+
 export default Analytics;
