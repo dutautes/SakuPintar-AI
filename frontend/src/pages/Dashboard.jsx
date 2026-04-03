@@ -42,7 +42,6 @@ function Dashboard() {
       const data = await res.json();
       console.log("DATA DASHBOARD:", data);
 
-      // 🔥 biar ga error
       if (Array.isArray(data)) {
         setTransactions(data);
       } else {
@@ -65,6 +64,39 @@ function Dashboard() {
   let totalBalance = 0;
   let monthlyIncome = 0;
   let monthlyExpense = 0;
+
+  const monthlyIncomeData = Array(12).fill(0);
+  const monthlyExpenseData = Array(12).fill(0);
+
+  transactions.forEach((t) => {
+    const date = new Date(t.date);
+    const month = date.getMonth();
+    const amount = Number(t.amount);
+
+    if (t.type === "Income") {
+      monthlyIncomeData[month] += amount;
+    } else {
+      monthlyExpenseData[month] += amount;
+    }
+  });
+
+  const currentYearTransactions = transactions.filter(
+    (t) => new Date(t.date).getFullYear() === currentYear
+  );
+
+  const firstMonth = currentYearTransactions.length
+    ? Math.min(
+        ...currentYearTransactions.map((t) =>
+          new Date(t.date).getMonth()
+        )
+      )
+    : 0;
+
+  const maxValue = Math.max(
+    ...monthlyIncomeData,
+    ...monthlyExpenseData,
+    1
+  );
 
   transactions.forEach((t) => {
     const amount = Number(t.amount);
@@ -170,19 +202,65 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* CHART */}
-        <div className="bg-white p-6 rounded-2xl shadow mb-8">
-          <p className="mb-4 font-medium">Expense vs Income</p>
-          <div className="flex items-end justify-between h-40 px-4">
-            {[40, 60, 80, 100].map((h, i) => (
-              <div key={i} className="flex gap-1 items-end">
-                <div className="w-3 bg-green-400 rounded" style={{ height: h }}></div>
-                <div className="w-3 bg-red-400 rounded" style={{ height: h - 20 }}></div>
-              </div>
-            ))}
-          </div>
-        </div>
+       {/* CHART */}
+<div className="bg-white p-6 rounded-2xl shadow mb-8">
+<div className="flex justify-between items-center mb-4">
+  <p className="font-medium">Expense vs Income</p>
 
+  <div className="flex items-center gap-4 text-xs">
+    {/* Income */}
+    <div className="flex items-center gap-1">
+      <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+      <span className="text-gray-500">Income</span>
+    </div>
+
+    {/* Expense */}
+    <div className="flex items-center gap-1">
+      <span className="w-2 h-2 bg-red-400 rounded-full"></span>
+      <span className="text-gray-500">Expense</span>
+    </div>
+  </div>
+</div>
+  <div className="flex items-end justify-between h-40 px-4">
+    {monthlyIncomeData.map((inc, i) => {
+
+      if (i < firstMonth) return null;
+
+      const exp = monthlyExpenseData[i];
+
+      return (
+        <div key={i} className="flex flex-col items-center gap-1 w-full">
+
+          <div
+            className="flex gap-1 items-end"
+            title={`Income: Rp ${inc.toLocaleString("id-ID")} | Expense: Rp ${exp.toLocaleString("id-ID")}`}
+          >
+            {/* INCOME */}
+            <div
+              className="w-3 bg-green-400 rounded"
+              style={{
+                height: `${(inc / maxValue) * 150}px`,
+              }}
+            ></div>
+
+            {/* EXPENSE */}
+            <div
+              className="w-3 bg-red-400 rounded"
+              style={{
+                height: `${(exp / maxValue) * 150}px`,
+              }}
+            ></div>
+          </div>
+
+          <span className="text-xs text-gray-400 mt-1">
+            {["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][i]}
+          </span>
+
+        </div>
+      );
+    })}
+  </div>
+</div>
         {/* RECENT TRANSACTIONS */}
         <div className="bg-white p-6 rounded-2xl shadow">
           <div className="flex justify-between items-center mb-4">
