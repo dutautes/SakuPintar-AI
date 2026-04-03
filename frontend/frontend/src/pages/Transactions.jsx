@@ -76,7 +76,7 @@ console.log("TOKEN:", token);
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // 🔥 penting
+          Authorization: `Bearer ${token}`, 
         },
       });
 

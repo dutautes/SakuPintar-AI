@@ -58,6 +58,7 @@ function AddTransaction() {
         type,
         amount,
         date,
+        time,
         desc,
       }),
     });
@@ -71,7 +72,7 @@ function AddTransaction() {
     }
 
     toast.success("Transaksi berhasil disimpan!");
-    navigate("/transactions"); // ✅ pindah setelah sukses
+    navigate("/transactions"); // 
 
   } catch (error) {
     console.error(error);
