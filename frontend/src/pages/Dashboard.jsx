@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { FiSearch, FiBell, FiPlus } from "react-icons/fi";
+import { FiSearch, FiBell, FiPlus, FiMenu } from "react-icons/fi";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import {
   ShoppingCart, Utensils, Car, Home, Film, HeartPulse, Wallet,
@@ -59,6 +59,7 @@ function BarChart({ data, maxVal }) {
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [search, setSearch]     = useState("");
   const [chartMode, setChartMode] = useState("monthly");
@@ -158,13 +159,21 @@ function Dashboard() {
 
   return (
     <div className="flex min-h-screen bg-[#f5f7fb]">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex-1 p-8 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         {/* HEADER */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
           <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-600"
+            >
+              <FiMenu size={20} />
+            </button>
+            <h1 className="text-xl md:text-2xl font-semibold">Dashboard</h1>
+          </div>
+          <div className="hidden md:flex items-center gap-4">
             <div className="flex items-center bg-white px-4 py-2 rounded-lg shadow-sm">
               <FiSearch className="text-gray-400" />
               <input
@@ -189,10 +198,24 @@ function Dashboard() {
               )}
             </div>
           </div>
+          
+          {/* Mobile User Avatar */}
+          <div className="md:hidden flex items-center gap-3">
+             <FiBell className="text-gray-500 text-xl" />
+             {userAvatar ? (
+                <img src={userAvatar} className="w-8 h-8 rounded-full object-cover border-2 border-white shadow" alt="avatar" />
+              ) : (
+                <img
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${userName}&backgroundColor=1e3a8a`}
+                  className="w-8 h-8 rounded-full"
+                  alt="avatar"
+                />
+              )}
+          </div>
         </div>
 
         {/* CARDS */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-gradient-to-r from-[#1e3a8a] to-[#1d4ed8] text-white p-6 rounded-2xl shadow flex flex-col justify-center">
             <p className="text-sm opacity-80 mb-1">Total Balance</p>
             <h2 className="text-3xl font-bold">{formatRp(totalBalance)}</h2>

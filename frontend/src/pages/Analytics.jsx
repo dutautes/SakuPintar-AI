@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { FiDownload, FiTrendingUp } from "react-icons/fi";
+import { FiDownload, FiTrendingUp, FiMenu } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -119,6 +119,7 @@ function TrendChart({ data, maxVal }) {
 
 function Analytics() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading]           = useState(true);
   const [trendYear, setTrendYear]       = useState(new Date().getFullYear());
@@ -235,17 +236,25 @@ function Analytics() {
 
   return (
     <div className="flex min-h-screen bg-[#f5f7fb]">
-      <Sidebar />
-      <div className="flex-1 p-8 overflow-y-auto">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-semibold">Analytics</h1>
-            <p className="text-sm text-gray-400 mt-0.5">Ringkasan keuangan dari seluruh transaksi kamu</p>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-600"
+            >
+              <FiMenu size={20} />
+            </button>
+            <div>
+              <h1 className="text-xl md:text-2xl font-semibold">Analytics</h1>
+              <p className="text-sm text-gray-400 mt-0.5">Ringkasan keuangan kamu</p>
+            </div>
           </div>
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition"
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition"
           >
             <FiDownload size={15} />
             Export CSV
@@ -253,7 +262,7 @@ function Analytics() {
         </div>
 
         {/* STATS CARDS */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
             <p className="text-xs text-gray-400 mb-1">Total Spent (Rp)</p>
             <h2 className="text-xl font-bold text-gray-900">{formatRp(totalSpent)}</h2>
@@ -283,15 +292,15 @@ function Analytics() {
         </div>
 
         {/* CHART + DONUT */}
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Spending Trend */}
-          <div className="col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
+          <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-2">
                 <FiTrendingUp className="text-blue-500" />
                 <h2 className="font-semibold text-gray-800">Spending Trend</h2>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <span className="flex items-center gap-1 text-[11px] text-gray-400">
                   <span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> Income
                 </span>

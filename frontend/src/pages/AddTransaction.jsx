@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { toast } from "react-toastify";
+import { FiMenu } from "react-icons/fi";
 import {
   ShoppingCart,
   Utensils,
@@ -24,6 +25,7 @@ const categories = [
 
 function AddTransaction() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [type, setType] = useState("Expense");
   const [amount, setAmount] = useState("");
@@ -82,10 +84,22 @@ function AddTransaction() {
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FB]">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex-1 flex justify-center items-center">
-        <div className="bg-white w-[420px] p-8 rounded-2xl shadow-md">
+      <div className="flex-1 flex flex-col items-center p-4">
+        {/* Mobile Header Toggle */}
+        <div className="w-full md:hidden flex items-center justify-between mb-4">
+           <button 
+                onClick={() => setSidebarOpen(true)}
+                className="p-2 bg-white rounded-lg shadow-sm text-gray-600"
+              >
+                <FiMenu size={20} />
+              </button>
+           <h2 className="font-semibold text-gray-800">New Transaction</h2>
+           <div className="w-10"></div> {/* Spacer */}
+        </div>
+
+        <div className="bg-white w-full max-w-[420px] p-6 md:p-8 rounded-2xl shadow-sm md:shadow-md mt-0 md:mt-10">
           
           {/* Header */}
           <div className="flex justify-between items-center mb-6">

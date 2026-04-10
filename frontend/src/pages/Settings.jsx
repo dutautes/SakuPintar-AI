@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
-  FiMoon, FiSun, FiGlobe, FiBell, FiShield, FiTrash2, FiLogOut, FiLock,
+  FiMoon, FiSun, FiGlobe, FiBell, FiShield, FiTrash2, FiLogOut, FiLock, FiMenu,
 } from "react-icons/fi";
 
 function Toggle({ value, onChange }) {
@@ -19,6 +19,7 @@ function Toggle({ value, onChange }) {
 
 function Settings() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const token    = localStorage.getItem("token");
 
   // ── Dark mode ──────────────────────────────────────────────────────────────
@@ -115,10 +116,18 @@ function Settings() {
   const input = "w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400";
 
   return (
-    <div className={`flex min-h-screen ${darkMode ? "bg-gray-900" : "bg-[#f5f7fb]"}`}>
-      <Sidebar />
-      <div className={`flex-1 p-8 max-w-2xl overflow-y-auto`}>
-        <h1 className={`text-2xl font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>Settings</h1>
+    <div className={`flex min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-[#f5f7fb]"}`}>
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className={`flex-1 p-4 md:p-8 max-w-2xl mx-auto overflow-y-auto`}>
+        <div className="flex items-center gap-3 mb-4 md:mb-6">
+           <button 
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-600"
+            >
+              <FiMenu size={20} />
+            </button>
+            <h1 className={`text-xl md:text-2xl font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>Settings</h1>
+        </div>
         <p className={`text-sm mb-8 ${darkMode ? "text-gray-400" : "text-gray-400"}`}>Kelola tampilan, keamanan, dan preferensi akun kamu</p>
 
         {/* ── Tampilan ── */}
@@ -147,7 +156,7 @@ function Settings() {
             <FiGlobe className="text-green-500" />
             Bahasa & Mata Uang
           </h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={label}>Bahasa</label>
               <select value={language} onChange={(e) => setLanguage(e.target.value)}
@@ -231,7 +240,7 @@ function Settings() {
               <input type="password" placeholder="••••••••" value={passwords.current}
                 onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className={input} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={label}>New Password</label>
                 <input type="password" placeholder="Min. 6 karakter" value={passwords.new}

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 // Pages
 import Login from "./pages/Login";
@@ -13,6 +13,7 @@ import AddTransaction from "./pages/AddTransaction";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AIChatWidget from "./components/AIChatWidget";
 
 
 // Protected route component
@@ -21,10 +22,25 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/" />;
 }
 
+// Component to conditionally show AI Widget
+function AIWidgetWrapper() {
+  const location = useLocation();
+  const userData = localStorage.getItem("user");
+  
+  // Hide on auth pages, profile, and settings
+  const excludedPaths = ["/", "/register", "/profile", "/settings"];
+  const isExcluded = excludedPaths.includes(location.pathname);
+
+  if (!userData || isExcluded) return null;
+  
+  return <AIChatWidget />;
+}
+
 function App() {
   return (
     <Router>
       <ToastContainer />
+      <AIWidgetWrapper />
       <Routes>
         {/* Auth routes */}
         <Route path="/" element={<Login />} />

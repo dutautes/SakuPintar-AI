@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { toast } from "react-toastify";
+import { FiMenu } from "react-icons/fi";
 
 import {
   ShoppingCart,
@@ -36,6 +37,7 @@ const dateOptions = [
 
 function Transactions() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -128,23 +130,31 @@ function Transactions() {
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FB]">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex-1 px-10 py-8">
+      <div className="flex-1 px-4 md:px-10 py-8 overflow-y-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-800">Transactions</h1>
-            <p className="text-sm text-gray-400 mt-1">
-              Balance:{" "}
-              <span className={totalBalance >= 0 ? "text-green-600 font-semibold" : "text-red-500 font-semibold"}>
-                {totalBalance >= 0 ? "+" : ""}Rp {totalBalance.toLocaleString("id-ID")}
-              </span>
-            </p>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div className="flex items-center gap-3">
+             <button 
+                onClick={() => setSidebarOpen(true)}
+                className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-600"
+              >
+                <FiMenu size={20} />
+              </button>
+            <div>
+              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">Transactions</h1>
+              <p className="text-sm text-gray-400 mt-1">
+                Balance:{" "}
+                <span className={totalBalance >= 0 ? "text-green-600 font-semibold" : "text-red-500 font-semibold"}>
+                  {totalBalance >= 0 ? "+" : ""}Rp {totalBalance.toLocaleString("id-ID")}
+                </span>
+              </p>
+            </div>
           </div>
           <button
             onClick={() => navigate("/add-transaction")}
-            className="bg-[#0B1E4F] hover:bg-[#09163a] transition text-white px-6 py-2.5 rounded-xl shadow-sm"
+            className="w-full md:w-auto bg-[#0B1E4F] hover:bg-[#09163a] transition text-white px-6 py-2.5 rounded-xl shadow-sm text-sm"
           >
             + Add Transaction
           </button>
@@ -153,14 +163,14 @@ function Transactions() {
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           {/* Search + Filter */}
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 mb-6">
             <input
               placeholder="Search by name or category..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border border-gray-200 rounded-xl px-4 py-2 w-[320px] focus:outline-none focus:ring-2 focus:ring-blue-100"
+              className="border border-gray-200 rounded-xl px-4 py-2 w-full lg:w-[320px] focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm"
             />
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2 md:gap-3">
               {/* CATEGORY DROPDOWN */}
               <div className="relative">
                 <button
@@ -211,8 +221,9 @@ function Transactions() {
             </div>
           </div>
 
-          {/* Table */}
-          <table className="w-full text-sm">
+          {/* Table Container */}
+          <div className="overflow-x-auto -mx-6 px-6">
+            <table className="w-full text-sm min-w-[600px]">
             <thead className="text-gray-400 text-left">
               <tr>
                 <th className="pb-4 font-medium">Transaction</th>
@@ -269,6 +280,7 @@ function Transactions() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

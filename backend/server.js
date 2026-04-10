@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import transactionRoutes from "./routes/TransactionRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +29,7 @@ app.use("/api", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Default route
 app.get("/", (req, res) => res.send("Server is running!"));

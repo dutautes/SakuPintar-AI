@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { FiSearch, FiBell, FiCamera, FiMapPin, FiCalendar } from "react-icons/fi";
+import { FiSearch, FiBell, FiCamera, FiMapPin, FiCalendar, FiMenu } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const navigate    = useNavigate();
   const fileRef     = useRef(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profile, setProfile]       = useState(null);
   const [loading, setLoading]       = useState(true);
   const [avatarPreview, setAvatarPreview] = useState(null);
@@ -128,11 +129,10 @@ function Profile() {
       .then(() => toast.success("Preferensi email disimpan!"))
       .catch(() => toast.error("Gagal menyimpan preferensi"));
   };
-
   if (loading) {
     return (
       <div className="flex min-h-screen bg-[#f8fafc]">
-        <Sidebar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
       </div>
     );
@@ -143,12 +143,20 @@ function Profile() {
 
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
-      <Sidebar />
-      <div className="flex-1 p-8 overflow-y-auto">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         {/* HEADER */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
+             <button 
+                onClick={() => setSidebarOpen(true)}
+                className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-600"
+              >
+                <FiMenu size={20} />
+              </button>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">My Profile</h1>
+          </div>
+          <div className="hidden md:flex items-center gap-6">
             <div className="flex items-center bg-transparent border-b border-gray-200 px-2 py-1 w-64">
               <FiSearch className="text-gray-400 mr-2" />
               <input type="text" placeholder="Search..." className="bg-transparent outline-none text-sm w-full text-gray-500" />
@@ -160,9 +168,9 @@ function Profile() {
           </div>
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* LEFT */}
-          <div className="col-span-4">
+          <div className="lg:col-span-4">
             <div className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm flex flex-col items-center text-center">
               {/* Avatar + upload */}
               <div className="relative mb-4">
@@ -213,11 +221,11 @@ function Profile() {
           </div>
 
           {/* RIGHT */}
-          <div className="col-span-8 space-y-6">
+          <div className="lg:col-span-8 space-y-6">
             {/* Personal Info */}
             <div className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
               <h3 className="text-base font-bold text-gray-900 mb-6">Personal Information</h3>
-              <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-2">
                   <label className="text-[11px] font-bold text-gray-700">First Name</label>
                   <input type="text" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })}
@@ -238,7 +246,7 @@ function Profile() {
                   <input type="text" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
-                <div className="space-y-2 col-span-2">
+                <div className="space-y-2 sm:col-span-2">
                   <label className="text-[11px] font-bold text-gray-700">Location</label>
                   <input type="text" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })}
                     placeholder="Jakarta, Indonesia"
@@ -252,7 +260,7 @@ function Profile() {
               </div>
               <div className="flex justify-end">
                 <button onClick={handleSaveProfile}
-                  className="bg-[#111827] text-white px-8 py-2.5 rounded-xl text-xs font-bold hover:bg-black transition-all">
+                  className="w-full sm:w-auto bg-[#111827] text-white px-8 py-2.5 rounded-xl text-xs font-bold hover:bg-black transition-all">
                   Save Changes
                 </button>
               </div>
@@ -268,7 +276,7 @@ function Profile() {
                     placeholder="••••••••"
                     className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[11px] font-bold text-gray-700">New Password</label>
                     <input type="password" value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
@@ -284,7 +292,7 @@ function Profile() {
                 </div>
                 <div className="flex justify-end pt-2">
                   <button onClick={handleUpdatePassword}
-                    className="border border-gray-200 text-gray-900 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-50 transition">
+                    className="w-full sm:w-auto border border-gray-200 text-gray-900 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-50 transition">
                     Update Password
                   </button>
                 </div>
@@ -316,7 +324,7 @@ function Profile() {
               </div>
               <div className="flex justify-end mt-6">
                 <button onClick={handleSavePreferences}
-                  className="bg-[#111827] text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-black transition">
+                  className="w-full sm:w-auto bg-[#111827] text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-black transition">
                   Simpan Preferensi
                 </button>
               </div>
