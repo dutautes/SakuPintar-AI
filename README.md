@@ -83,11 +83,11 @@ SakuPintar-AI/
 ---
 
 ## 👥 Anggota Tim (CC26-PS015)
-1. Member 1
-2. Member 2
-3. Member 3
-4. Member 4
-5. Member 5
+1. Duta Suksesi Fathurrahman 
+2. Muhammad Al-Fathir
+3. Anggrayani Nur Aeni
+4. Aulia Amandasari Tri
+5. Alfira Ramadhani
 
 ---
 
